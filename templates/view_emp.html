@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Employee</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 50px;
+        text-align: center;
+      }
+      table {
+        width: 80%;
+        margin: auto;
+        border-collapse: color;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 20px;
+        text-align: center;
+      }
+      th {
+        background-color: #f4f4f4;
+      }
+      button {
+        background-color: #d9534f;
+        color: white;
+        padding: 8px 12px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      button:hover {
+        background-color: #c9302c;
+      }
+    </style>
+  </head>
+  <body>
+    {% include "navbar.html" %} {% block content %} {% endblock %}
+    <h2 style="color: #007bff">View Employee</h2>
+    <form method="GET" action="{% url 'view_emp' %}">
+      <input
+        type="text"
+        name="q"
+        placeholder="Search employee..."
+        value="{{ request.GET.q }}"
+      />
+      <button type="submit">Search</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Emp_ID</th>
+          <th>Name</th>
+          <th>Contact</th>
+          <th>Email Id</th>
+          <th>Age</th>
+          <th>Gender</th>
+
+          <th>Department</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for employee in employees %}
+        <tr>
+          <td>{{ employee.empid }}</td>
+          <td>{{ employee.name }}</td>
+          <td>{{ employee.contact }}</td>
+          <td>{{ employee.email }}</td>
+          <td>{{ employee.age }}</td>
+          <td>{{ employee.gender }}</td>
+          <td>{{ employee.dept }}</td>
+        <td style="display: flex; gap: 10px; justify-content: center;">
+  <form action="{% url 'delete_emp1' employee.id %}" method="POST">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+  </form>
+  <form action="{% url 'update_emp' employee.id %}" method="POST">
+    {% csrf_token %}
+    <button type="submit">Update</button>
+  </form>
+</td>
+
+          </td>
+         
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6">No employee data found</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>
